@@ -1,0 +1,133 @@
+# Build Progress
+
+## Completed
+- Block 00 delivered the first app foundation on top of the Flutter scaffold.
+- Replaced the broken starter app with a feature-first structure under `lib/`.
+- Added Riverpod bootstrapping, GoRouter navigation, and a responsive app shell with bottom navigation on compact widths and navigation rail on wider layouts.
+- Created placeholder entry screens for Dashboard, Orders, Production, Purchases, Finance, Clients, and Business Settings.
+- Added a calm Material 3 theme aligned with the product direction.
+- Added offline-safe Supabase initialization based on `SUPABASE_URL` and `SUPABASE_ANON_KEY` dart defines.
+- Added the Drift database foundation and a minimal `sync_queue` table for future offline sync work.
+- Added shared helpers for pt-BR formatting, safe money handling, breakpoints, and common empty/loading/error states.
+- Block 01 delivered the first usable local Orders flow.
+- Added local Orders persistence with Drift, repository/provider wiring, and a schema upgrade from version 1 to 2.
+- Replaced the Orders placeholder with a responsive list, search, status filters, date grouping, details screen, and create/edit flow.
+- Added safe local support for client snapshot, event date, delivery or pickup, delivery fee, notes, total, deposit, remaining amount, and order status.
+- Added Orders web runtime assets required by Drift local persistence.
+- Block 02 delivered the first practical Clients flow integrated with Orders.
+- Added local Clients persistence with Drift, including client records, lightweight important dates, repository/provider wiring, and a schema upgrade from version 2 to 3.
+- Replaced the Clients placeholder with responsive list, search, details, and create/edit flows focused on operational context.
+- Added basic order history inside the client profile by reusing the local Orders module.
+- Updated the Orders form so the user can link an existing client or create a quick client without leaving the flow permanently.
+- Block 03 delivered the first local Products base and connected it to Orders through order items with historical snapshots.
+- Added local Products persistence with Drift, including product records, lightweight flavors and variations, repository/provider wiring, and a schema upgrade from version 3 to 4.
+- Added responsive Products list, filters, details, and create/edit flows under the Business area.
+- Extended Orders with local order items that can optionally reference a product while preserving item name and price snapshots for history safety.
+- Block 04 delivered the first local Ingredients and Stock base with traceable manual adjustments.
+- Added local Ingredients persistence with Drift, including stock quantities, minimum stock, purchase and stock units, conversion factor, unit cost, supplier placeholder, and a schema upgrade from version 4 to 5.
+- Added local stock movement records so future purchases and production flows can update inventory with traceability.
+- Replaced the old Purchases placeholder in navigation with a first practical stock workspace focused on ingredients and low-stock alerts.
+- Added responsive Ingredients list, low-stock filters, detail, create/edit, and manual stock adjustment flows with clear pt-BR operational language.
+- Added a lightweight unit conversion model ready for common cases such as `kg -> g`, `L -> ml`, `un -> un`, and configurable package conversions for local stock control.
+- Block 05 delivered the first local Recipes base with automatic cost calculation and lightweight product links.
+- Added local Recipes persistence with Drift, including recipe records, ingredient lines, product-to-recipe links, and a schema upgrade from version 5 to 6.
+- Added responsive Recipes list, detail, and create/edit flows with yield, optional base/flavor structure, ingredient lines, and automatic cost summaries in pt-BR.
+- Extended Products so a product can already point to one or more recipes for future smart order automation without losing the current lightweight product flow.
+- Block 06 delivered the first local Packaging base with cost, stock, compatibility, and default product suggestions.
+- Added local Packaging persistence with Drift, including packaging records, product-to-packaging links, default suggested packaging flags, and a schema upgrade from version 6 to 7.
+- Added responsive Packaging list, low-stock view, detail, and create/edit flows focused on quick operational reading in pt-BR.
+- Extended Products so each product can keep multiple compatible packaging options and one default packaging suggestion for future order automation.
+- Block 07 delivered the first smart Orders flow with automatic local downstream records.
+- Upgraded local Orders persistence with a schema upgrade from version 7 to 8, adding smart review snapshots, local reference photo path support, quantity-aware order items, and internal tables for production plans, material needs, and receivable entries.
+- Replaced the old large order form with a guided 3-step flow: quick order, smart review, and confirm order.
+- Added smart order calculation that reuses linked product, recipe, ingredient, and packaging data to estimate cost, suggest sale price, predict profit, and flag missing ingredients or packaging locally.
+- Updated the order details screen with the MVP tabs `Resumo`, `Produção`, `Materiais`, `Financeiro`, and `Observações`, reading the generated local records directly.
+- Block 08 delivered the first operational Production workspace on top of the records generated by confirmed orders.
+- Upgraded the local schema from version 8 to 9, enriching production plans and material needs with structured grouping metadata and tracked completion state, plus a dedicated `packaging_stock_movements` table for traceable packaging consumption.
+- Replaced the old Production placeholder with responsive Today and Week views, grouping toggles for `Pedido`, `Receita`, and `Item`, and actionable task cards with local status updates in pt-BR.
+- Added a safe completion rule so projected material demand only becomes real stock consumption when the correct production step is concluded, avoiding double consumption by tracking completion per need and per plan.
+- Added traceable local stock effects for production completion, writing ingredient and packaging consumption history when the corresponding plan is marked as completed.
+- Block 09 delivered the first practical Suppliers base focused on real buying decisions.
+- Upgraded the local schema from version 9 to 10, adding `suppliers`, `ingredient_supplier_links`, and `supplier_item_prices` for lightweight relationship and price history support.
+- Added responsive Suppliers list, detail, and create/edit flows under the Business area, with contact, lead time, active state, linked ingredients, and recent price history in pt-BR.
+- Extended Ingredients so each ingredient can keep one preferred supplier plus optional alternatives, while preserving legacy text snapshots for older local records.
+- Added supplier price registration for ingredients and packaging so the app can already keep last known buying references for future grouped purchase flows.
+- Block 10 delivered the first smart Purchases workspace on top of projected material needs, current stock, minimum stock rules, and supplier context.
+- Upgraded the local schema from version 10 to 11, adding `purchase_entries` and `purchase_expense_entries` so registered purchases can update stock with traceability and optionally prepare Finance records.
+- Replaced the old Purchases placeholder with responsive checklist views for `Comprar agora`, `Esta semana`, and `Por fornecedora`, showing only the real missing quantity after considering current stock and configured minimums.
+- Added purchase registration that raises ingredient or packaging stock immediately, writes traceable stock movements, and creates prepared expense drafts when a purchase amount is informed.
+- Moved the ingredient stock workspace under the Purchases area as a dedicated stock sub-route, keeping the smart shopping list as the main entry point of the tab.
+- Block 11 delivered the first integrated Finance workspace focused on owner-friendly operational reading instead of isolated bookkeeping.
+- Upgraded the local schema from version 11 to 12, adding `finance_manual_entries` plus settlement dates on receivables and purchase expenses so real cash flow can be filtered by period with traceability.
+- Replaced the old Finance placeholder with responsive views for `Visão geral`, `Recebimentos`, `Saídas`, and `Lançamentos`, including daily, weekly, and monthly filters in pt-BR.
+- Connected Finance to local order receivables, purchase expense drafts, and manual entries so the app can show `Entrou`, `Saiu`, `Falta receber`, `Lucro estimado`, `Lucro real`, and a practical break-even indicator.
+- Added local finance actions to mark receivables as received, mark prepared purchase expenses as paid, and register manual income or expense entries without breaking the offline-first flow.
+- Block 12 delivered the first executive Dashboard as the main daily assistant screen instead of a generic module catalog.
+- Replaced the old Dashboard placeholder with an aggregated daily panel powered by local Orders, Production, Purchases, Ingredients, and Finance data, without introducing new schema changes.
+- Added a greeting hero with a concise attention summary, a strong `+ Novo pedido` primary action, and clickable summary cards for weekly orders, predicted profit, amount to receive, and low materials.
+- Added `O que fazer hoje`, weekly agenda, `Precisa de atenção`, and concise finance summary sections with actionable routing to the correct module screens on mobile and web layouts.
+- Added dashboard domain logic and tests so the daily snapshot remains predictable, assistant-like, and easy to evolve without pushing business rules into the UI.
+- Block 13 delivered the first mesversário workspace with local recurrence tracking and future draft generation.
+- Upgraded the local schema from version 12 to 13, adding `monthly_plans`, `monthly_plan_items`, and `monthly_plan_occurrences` so recurring monthly plans can persist client links, template items, future months, and generated-order history locally.
+- Added a dedicated Mesversários flow under the Clients area with responsive list, detail, and create/edit screens focused on monthly-plan logic instead of overloading the generic Products module.
+- Added local support for model/base product links, recurring monthly template items, monthly history, contracted quantity, remaining balance, future impact preview, and generation of future order drafts within the available contracted balance.
+- Extended the client profile with a mesversário section so recurring plans stay tied to relationship context while still remaining clearly separated from regular orders and products.
+- Added repository and service tests covering monthly-plan persistence, month generation behavior, draft generation, and remaining-balance tracking.
+- Block 14 delivered the first lightweight Cost-Benefit Comparator focused on quick buying decisions instead of spreadsheet-style analysis.
+- Added a responsive comparator screen under Purchases that accepts multiple package options with price and quantity, normalizes the result by `kg`, `L`, or `un`, and highlights the best option immediately in pt-BR.
+- Added safe local comparison logic and tests for weight, volume, and unit scenarios, including mixed `g/kg` and `ml/L` inputs without using raw `double` for money.
+- Added optional ingredient-context import from the stock details screen so the user can start from the current registered purchase reference but still use the comparator standalone.
+- Block 15 delivered the first real offline-first sync foundation with team readiness on top of the local database.
+- Upgraded the local schema from version 13 to 14, adding sync metadata to the main root entities plus local tables for team context and global sync state.
+- Added root-snapshot sync support for clients, orders, products, ingredients, recipes, packaging, suppliers, monthly plans, and finance manual entries, including local queue deduplication and last-write-wins reconciliation by `updatedAt`.
+- Connected cross-module write flows so stock changes, receivable settlement, supplier prices, production completion, and mesversário generation all feed the correct root entity into the local sync queue.
+- Added a Business Settings sync card showing team context, pending local changes, last sync signals, offline-safe guidance, and a manual `Sincronizar agora` action without hard-blocking the app on auth.
+- Added `docs/sql/block_15_offline_sync_team.sql` and `docs/sync_strategy.md` so Supabase setup, temporary policy choices, and conflict behavior are documented inside the repo.
+- Block 16 delivered the first practical commercial layer for quotes and sharing without turning the app into a public catalog platform.
+- Added local business brand settings backed by `shared_preferences`, covering business name, tagline, commercial contact, footer message, and a lightweight accent palette for exported materials.
+- Added a presentable order quote PDF preview with clean branding, clear totals, and built-in print/share actions using the new commercial identity data.
+- Added a WhatsApp-friendly commercial summary action from order details, with native share fallback to clipboard when the platform share sheet is unavailable.
+- Extended the Business area with a dedicated `Marca e orçamento` screen so the exported material can be tuned without touching the operational order flow.
+- Block 17 delivered the final heavy polish pass focused on coherence, responsiveness, QA, and safe cleanup before future expansion.
+- Standardized the shared summary metric widget used across the main list modules, reducing duplicated UI code and keeping the visual hierarchy more consistent.
+- Polished the shared loading, empty, and error states so they behave better on wide layouts and feel more intentional across modules without reworking each screen separately.
+- Removed an unused placeholder screen left from the earlier scaffold phase.
+- Added `docs/qa_checklist.md` with a manual validation pass for the main operational flows, responsive checks, sync behavior, and commercial export flows.
+- Strengthened regression coverage around cross-module operational actions that also affect local sync readiness.
+
+## Final Status Snapshot
+- The app now covers the intended local-first operational foundation from order intake to production, purchases, finance, recurring monthly plans, sync readiness, and commercial export.
+- The current repo state is coherent enough for manual QA across the main flows on Web and Android-first responsive layouts.
+- The most important remaining work is no longer missing foundation; it is expansion work on top of the delivered base.
+
+## Recommended Next Roadmap
+- Add authentication and real team membership flows on top of the collaboration-ready data layer.
+- Harden remote sync with stronger policies, richer conflict handling, and explicit delete flows.
+- Expand CRM and reminder behaviors without turning the app into a heavy admin suite.
+- Add purchase grouping and replenishment automation layers on top of the current smart checklist.
+- Deepen finance with richer reconciliation and recurring-cost support after the current operational loop is validated in real usage.
+
+## Pending
+- Smarter links that can enrich Products and Orders later without breaking the current manual snapshots.
+- Automated stock consumption based on production and deeper recipe execution flows still depend on later blocks.
+- Flavor-specific cost overrides and richer recipe variation logic remain intentionally out of scope for now.
+- Purchase automation and supplier-driven stock updates still depend on later blocks.
+- The future Purchases workflow still needs grouped replenishment suggestions and purchase-order style UX on top of the supplier data now stored locally.
+- Real business workflows for the remaining modules.
+- Authentication and guarded remote flows.
+- Deeper CRM-like behaviors such as reminders, segmentation, and richer follow-up automations remain intentionally out of scope.
+- Dedicated Materials follow-up workflows still need their own block-specific UI even though Orders and Production already write the local records they will consume.
+- Purchase-driven replenishment and richer packaging stock handling still depend on future blocks even though production completion already writes local packaging consumption history.
+- Finance still needs deeper cash-flow follow-up such as recurring costs, reconciliation helpers, and richer profitability drill-downs on top of the integrated base now delivered.
+- The dashboard can still grow with smarter personalization, richer reminders, and cross-module suggestions after the remaining operational modules mature.
+- Full subscription billing, automatic plan charging, and financial renewal rules remain intentionally out of scope for now even though mesversário recurrence is now tracked locally.
+- The cost-benefit comparator can later grow with richer supplier shortcuts or direct reuse inside purchase registration, but the current block intentionally stops at fast standalone decision support.
+- The commercial layer can later grow with logo upload, public quote links, approval flows, and richer follow-up automation, but this block intentionally stops at local PDF generation, brand settings, and share-ready summaries.
+- The current sync conflict rule is intentionally simple `last-write-wins`; richer merge rules, deletion UX, and finer-grained remote auditing still depend on future blocks.
+- Team collaboration is only prepared at the data layer for now; authentication-backed membership, invitations, and stricter Supabase policies remain pending.
+
+## Manual Steps Outside The Repo
+- To enable Supabase later, run the app with `--dart-define=SUPABASE_URL=...` and `--dart-define=SUPABASE_ANON_KEY=...`.
+- Apply `docs/sql/block_15_offline_sync_team.sql` in the Supabase SQL Editor before testing remote sync.
+- Execute `docs/qa_checklist.md` on at least one phone width and one wide web width before calling this baseline ready for expansion.
+- If Drift is upgraded later, regenerate `web/drift_worker.js` and refresh `web/sqlite3.wasm` to keep Flutter Web local persistence compatible.
